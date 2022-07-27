@@ -80,8 +80,8 @@ location / {
 
 **3. `unplugin-auto-import` 和 `unplugin-vue-components`插件的理解**
 
-`unplugin-auto-import`: 允许代码中不写 `import xxx from 'xxx'`,自动导入
-`unplugin-vue-components`: 解决按名称匹配到的规则路径导入文件
+> `unplugin-auto-import`: 允许代码中不写 `import xxx from 'xxx'`,自动导入
+> `unplugin-vue-components`: 解决按名称匹配到的规则路径导入文件
 
 **4. 动态导入 `defineAsyncComponent` 的一些理解**
 
