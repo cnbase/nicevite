@@ -81,13 +81,17 @@ location / {
 **3. `unplugin-auto-import` 和 `unplugin-vue-components`插件的理解**
 
 > `unplugin-auto-import`: 允许代码中不写 `import xxx from 'xxx'`,自动导入
+
 > `unplugin-vue-components`: 解决按名称匹配到的规则路径导入文件
 
 **4. 动态导入 `defineAsyncComponent` 的一些理解**
 
 > 注意变量仅代表一层深的文件名。如果 file 是 foo/bar，导入将会失败。
+
 > 详见：https://cn.vitejs.dev/guide/features.html#dynamic-import
+
 > `defineAsyncComponent` ,变量形式: 变量名只能支持文件名，如./pages/{$path=ABC}.vue(OK),./pages/{$path=dir/ABC}.vue(X)
+
 > 试验证明：每个变量只能是目录名或文件名，即$path = 'home'(OK),$path = '/home'(带'/',X)
 
 ```
