@@ -6,7 +6,7 @@ const RootPath = resolve(__dirname)
  */
 const AllIndexFiles = {
     default: {
-        default: RootPath + '/index.html',
+        index: RootPath + '/index.html',
     },
     index: {
         index: RootPath + '/index/index.html',

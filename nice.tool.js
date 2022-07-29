@@ -6,7 +6,11 @@ const GetIndexFiles = function (allIndexFile, ModuleName) {
     let _indexFiles = {}
     if (!ModuleName) {
         for (let i in allIndexFile) {
-            _indexFiles = Object.assign(_indexFiles, allIndexFile[i])
+            for(let j in allIndexFile[i]) {
+                let tmpObj = new Object();
+                tmpObj[i+j] = allIndexFile[i][j]; 
+                _indexFiles = Object.assign(_indexFiles, tmpObj)
+            }
         }
     } else if (allIndexFile[ModuleName]) {
         _indexFiles = allIndexFile[ModuleName];
