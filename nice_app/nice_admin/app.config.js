@@ -11,7 +11,14 @@ const AppResolve = {}
 /**
  * 自定义 rollupOptions 参数
  */
-const AppRollupOptions = {}
+const AppRollupOptions = {
+    external: ['vue'],
+    output: {
+        globals: {
+            vue: 'Vue'
+        }
+    }
+}
 
 module.exports = {
     AppPlugins,
