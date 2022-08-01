@@ -41,6 +41,14 @@ const defineNiceConfig = async function () {
     IndexFiles = GetIndexFiles(AllIndexFiles, ModuleName)
 
     /**
+     * 获取项目配置
+     */
+    let AppConfig = await AsyncRequireFile(AppPath + '/app.config.js', { AppPlugins: [], AppResolve: {}, AppRollupOptions: {} })
+    let AppPlugins = AppConfig.AppPlugins ? AppConfig.AppPlugins : []
+    let AppResolve = AppConfig.AppResolve ? AppConfig.AppResolve : {}
+    let AppRollupOptions = AppConfig.AppRollupOptions ? AppConfig.AppRollupOptions : {}
+
+    /**
      * 构建相关的配置项
      */
     const BuildConfig = {
@@ -50,19 +58,13 @@ const defineNiceConfig = async function () {
         outDir: resolve(__dirname, 'nice_www/' + AppName + (ModuleName ? '/' + ModuleName : '')),
         assetsDir: 'static',
         rollupOptions: {
-            input: IndexFiles
+            input: IndexFiles,
+            ...AppRollupOptions
         },
         host: function (mode, envPath) {
             return loadEnv(mode, envPath, '').NICE_SITE_DOMAIN
         },
     }
-
-    /**
-     * 获取项目配置
-     */
-    let AppConfig = await AsyncRequireFile(AppPath + '/app.config.js', { AppPlugins: [], AppResolve: {} })
-    let AppPlugins = AppConfig.AppPlugins
-    let AppResolve = AppConfig.AppResolve
 
     /**
      * 插件相关
