@@ -37,7 +37,7 @@ const defineNiceConfig = async function () {
      * 载入项目入口文件
      */
     const { GetIndexFiles, AsyncRequireFile } = require('./nice.tool.js');
-    let AllIndexFiles = await AsyncRequireFile(AppPath + '/nice.index.js', {})
+    let AllIndexFiles = await AsyncRequireFile(AppPath + '/app.index.js', {})
     IndexFiles = GetIndexFiles(AllIndexFiles, ModuleName)
 
     /**
