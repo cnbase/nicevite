@@ -10,7 +10,7 @@ const defineNiceConfig = async function () {
     /**
      * 项目名称
      */
-    const AppName = 'demo'
+    const AppName = 'nice_admin'
 
     /**
      * 应用模块名称
