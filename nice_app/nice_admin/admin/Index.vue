@@ -8,7 +8,7 @@ import { Button, message } from 'ant-design-vue';
 
 export default {
     components: {
-        'a-button': Button
+        AButton: Button
     },
     methods: {
         alert: function () {
