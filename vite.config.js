@@ -19,7 +19,8 @@ export default defineConfig(async ({ mode }) => {
         assetsDir: niceConfig.BuildConfig.assetsDir,
         rollupOptions: niceConfig.BuildConfig.rollupOptions,
       },
-      resolve: niceConfig.Resolve
+      resolve: niceConfig.Resolve,
+      css: niceConfig.Css,
     }
   } catch (err) {
     console.log(err)
