@@ -43,9 +43,10 @@ const defineNiceConfig = async function () {
     /**
      * 获取项目配置
      */
-    let AppConfig = await AsyncRequireFile(AppPath + '/app.config.js', { AppPlugins: [], AppResolve: {}, AppRollupOptions: {} })
+    let AppConfig = await AsyncRequireFile(AppPath + '/app.config.js', { AppPlugins: [], AppResolve: {}, AppRollupOptions: {}, AppCss: {} })
     let AppPlugins = AppConfig.AppPlugins ? AppConfig.AppPlugins : []
     let AppResolve = AppConfig.AppResolve ? AppConfig.AppResolve : {}
+    let AppCss = AppConfig.AppCss ? AppConfig.AppCss : {}
     let AppRollupOptions = AppConfig.AppRollupOptions ? AppConfig.AppRollupOptions : {}
 
     /**
@@ -86,11 +87,19 @@ const defineNiceConfig = async function () {
         ...AppResolve
     }
 
+    /**
+     * css 相关
+     */
+    const Css = {
+        ...AppCss
+    }
+
     return {
         AppName,
         BuildConfig,
         Plugins,
         Resolve,
+        Css,
     }
 }
 
