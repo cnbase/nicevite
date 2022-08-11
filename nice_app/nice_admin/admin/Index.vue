@@ -2,30 +2,28 @@
     <a-layout style="height: 100vh">
         <a-layout-header :style="{ padding: '0 10px' }">
             <div :style="{ width: '200px', padding: '0 10px' }">
-                <div class="logo"></div>
+                <img class="logo" :src="'./images/logo.png'" />
             </div>
             <div :style="{ display: 'flex', justifyContent: 'flex-end' }">
                 <div :style="{ lineHeight: '64px', marginLeft: '10px', textAlign: 'center' }">
-                    <a-avatar :style="{ backgroundColor: '#87d068' }">
+                    <a-avatar :style="{ fontSize: '32px', backgroundColor: '#001529' }">
                         <template #icon>
-                            <UserOutlined />
+                            <nice-icon-font type="icon-user" />
                         </template>
                     </a-avatar>
                     <a-dropdown>
-                        <a class="ant-dropdown-link" :style="{ marginLeft: '5px', color: '#fff', fontWeight: 'bold' }" @click.prevent>
+                        <a class="ant-dropdown-link" :style="{ marginLeft: '5px', color: '#fff', fontWeight: 'bold' }"
+                            @click.prevent>
                             游客,你好
                             <DownOutlined />
                         </a>
                         <template #overlay>
                             <a-menu>
-                                <a-menu-item>
-                                    <a href="javascript:;">1st menu item</a>
+                                <a-menu-item @click="onClickChangePwd">
+                                    <a href="javascript:;">修改密码</a>
                                 </a-menu-item>
-                                <a-menu-item>
-                                    <a href="javascript:;">2nd menu item</a>
-                                </a-menu-item>
-                                <a-menu-item>
-                                    <a href="javascript:;">3rd menu item</a>
+                                <a-menu-item @click="onLogout">
+                                    <a href="javascript:;">注销登录</a>
                                 </a-menu-item>
                             </a-menu>
                         </template>
@@ -34,20 +32,20 @@
             </div>
         </a-layout-header>
         <a-layout>
-            <a-layout-sider v-model:collapsed="collapsed" collapsible :style="{ width: '200px', overflow: 'auto' }">
-                <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
+            <a-layout-sider v-model:collapsed="sideShow" collapsible :style="{ width: '200px', overflow: 'auto' }">
+                <a-menu v-model:selectedKeys="selectedMenuKeys" theme="dark" mode="inline">
                     <a-menu-item key="1">
-                        <icon-font type="icon-twitter"/>
+                        <nice-icon-font type="icon-caidan" />
                         <span>Option 1</span>
                     </a-menu-item>
                     <a-menu-item key="2">
-                        <icon-font type="icon-twitter"/>
+                        <nice-icon-font type="icon-caidan" />
                         <span>Option 2</span>
                     </a-menu-item>
                     <a-sub-menu key="sub1">
                         <template #title>
                             <span>
-                                <icon-font type="icon-twitter"/>
+                                <icon-font type="icon-twitter" />
                                 <span>User</span>
                             </span>
                         </template>
@@ -58,7 +56,7 @@
                     <a-sub-menu key="sub2">
                         <template #title>
                             <span>
-                                <icon-font type="icon-twitter"/>
+                                <icon-font type="icon-twitter" />
                                 <span>Team</span>
                             </span>
                         </template>
@@ -66,63 +64,57 @@
                         <a-menu-item key="8">Team 2</a-menu-item>
                     </a-sub-menu>
                     <a-menu-item key="9">
-                        <icon-font type="icon-twitter"/>
+                        <icon-font type="icon-twitter" />
                         <span>File</span>
                     </a-menu-item>
                     <a-menu-item key="10">
-                        <icon-font type="icon-twitter"/>
+                        <icon-font type="icon-twitter" />
                         <span>File</span>
                     </a-menu-item>
                     <a-menu-item key="11">
-                        <icon-font type="icon-twitter"/>
+                        <icon-font type="icon-twitter" />
                         <span>File</span>
                     </a-menu-item>
                     <a-menu-item key="12">
-                        <icon-font type="icon-twitter"/>
+                        <icon-font type="icon-twitter" />
                         <span>File</span>
                     </a-menu-item>
                     <a-menu-item key="13">
-                        <icon-font type="icon-twitter"/>
+                        <icon-font type="icon-twitter" />
                         <span>File</span>
                     </a-menu-item>
                     <a-menu-item key="14">
-                        <icon-font type="icon-twitter"/>
+                        <icon-font type="icon-twitter" />
                         <span>File</span>
                     </a-menu-item>
                     <a-menu-item key="15">
-                        <icon-font type="icon-twitter"/>
+                        <icon-font type="icon-twitter" />
                         <span>File</span>
                     </a-menu-item>
                     <a-menu-item key="16">
-                        <icon-font type="icon-twitter"/>
+                        <icon-font type="icon-twitter" />
                         <span>File</span>
                     </a-menu-item>
                     <a-menu-item key="17">
-                        <icon-font type="icon-twitter"/>
+                        <icon-font type="icon-twitter" />
                         <span>File</span>
                     </a-menu-item>
                     <a-menu-item key="18">
-                        <icon-font type="icon-twitter"/>
+                        <icon-font type="icon-twitter" />
                         <span>File</span>
                     </a-menu-item>
                 </a-menu>
             </a-layout-sider>
             <a-layout>
                 <a-layout-content :style="{ margin: '5px 16px 0' }">
-                    <a-tabs v-model:activeKey="activeKey" type="editable-card" :hideAdd="true" @edit="onEdit">
-                        <a-tab-pane key="1" tab="Tab 1" :closable="false" class="nice_tab_pane">
-                            Bill is a cat.
-                            <p style="height: 300px;">300px height</p>
-                            <p style="height: 300px;">300px height</p>
-                            <p style="height: 300px;">300px height</p>
-                            <p style="height: 300px;">300px height</p>
-                            <p style="height: 300px;">300px height</p>
+                    <a-tabs v-model:activeKey="tabs.currentTabKey" type="editable-card" :hideAdd="true"
+                        @edit="onCloseTab" @change="onChangeTab">
+                        <a-tab-pane key="0" tab="控制台" :closable="false" class="nice_tab_pane">
+                            控制台主页
                         </a-tab-pane>
-                        <a-tab-pane key="2" tab="Tab 2" :closable="true" class="nice_tab_pane">
-                            Content of Tab Pane 2
-                        </a-tab-pane>
-                        <a-tab-pane key="3" tab="Tab 3" :closable="true" class="nice_tab_pane">
-                            Content of Tab Pane 3
+                        <a-tab-pane v-for="pane in tabs.TabPane" :key="pane.id" :tab="pane.name" :closable="true"
+                            class="nice_tab_pane">
+                            {{ pane.content }}
                         </a-tab-pane>
                     </a-tabs>
                 </a-layout-content>
@@ -132,13 +124,20 @@
             </a-layout>
         </a-layout>
     </a-layout>
+    <a-modal v-model:visible="changePwd.visible" title="修改登录密码" :confirm-loading="changePwd.loading" @ok="onChangePwd">
+        <p>修改密码表单</p>
+    </a-modal>
 </template>
 
+<script setup>
+
+</script>
+
 <script>
-import { Layout, LayoutHeader, LayoutSider, LayoutFooter, LayoutContent, Menu, MenuItem, SubMenu, Tabs, TabPane, Avatar, Dropdown } from 'ant-design-vue'
-import { UserOutlined, DownOutlined } from '@ant-design/icons-vue';
-import IconFont from './IconFont'
-import { defineComponent, ref } from 'vue';
+import { Layout, LayoutHeader, LayoutSider, LayoutFooter, LayoutContent, Menu, MenuItem, SubMenu, Tabs, TabPane, Avatar, Dropdown, Modal, message } from 'ant-design-vue'
+import { DownOutlined } from '@ant-design/icons-vue';
+import { NiceIconFont, default as IconFont } from './IconFont'
+import { defineComponent, ref, getCurrentInstance } from 'vue';
 
 export default defineComponent({
     components: {
@@ -155,27 +154,100 @@ export default defineComponent({
         AAvatar: Avatar,
         ADropdown: Dropdown,
         IconFont,
-        UserOutlined,
+        NiceIconFont,
         DownOutlined,
-    },
-    setup() {
-        const onEdit = (targetKey, action) => {
-            if (action === 'remove') {
-                console.log('移除标签页')
-            }
-        };
-        return {
-            onEdit
-        }
+        AModal: Modal,
     },
     data() {
         return {
-            collapsed: ref(false),
-            selectedKeys: ref(['1']),
-            activeKey: ref('1'),
+            changePwd: {
+                visible: false,
+                loading: false,
+            },
+            //侧边栏显隐状态
+            sideShow: ref(false),
+            //默认选中的菜单数组
+            selectedMenuKeys: ref(['1']),
+            //标签页相关
+            tabs: {
+                //当前激活状态的tab标签
+                currentTabKey: '1',
+                //标签页列表
+                TabPane: [
+                    { id: '1', name: 'Tab 1', content: '<p style="height: 300px;">300px height</p><p style="height: 300px;">300px height</p><p style="height: 300px;">300px height</p><p style="height: 300px;">300px height</p><p style="height: 300px;">300px height</p>' },
+                    { id: '2', name: 'Tab 2', content: 'Content of Tab Pane 2' },
+                    { id: '3', name: 'Tab 3', content: 'Content of Tab Pane 3' },
+                    { id: '4', name: 'Tab 4', content: 'Content of Tab Pane 4' },
+                    { id: '5', name: 'Tab 5', content: 'Content of Tab Pane 5' },
+                ],
+            },
         };
     },
-
+    mounted() {
+        // let app = getCurrentInstance()
+        window.niceApp.onOpenTab = this.onOpenTab
+    },
+    methods: {
+        //监听修改密码
+        onClickChangePwd() {
+            this.changePwd.visible = true;
+        },
+        //修改密码
+        onChangePwd() {
+            this.changePwd.loading = true;
+            setTimeout(() => {
+                this.changePwd.visible = false;
+                this.changePwd.loading = false;
+                message.success('修改成功')
+            }, 2000);
+        },
+        //注销登录
+        onLogout() {
+            console.log('注销登录')
+            message.success('注销登录')
+        },
+        //监听关闭tab标签
+        onCloseTab(targetKey, action) {
+            if (action === 'remove') {
+                let currentTabKey = this.tabs.currentTabKey
+                //当前要关闭的tab页==当前显示的tab页,切换显示最后一个tab页
+                if (targetKey === currentTabKey) {
+                    //查找最靠近的tab页索引
+                    let lastIndex = 0
+                    this.tabs.TabPane.forEach((pane, i) => {
+                        if (pane.id == targetKey) {
+                            lastIndex = i - 1
+                        }
+                    })
+                    if (lastIndex >= 0) {
+                        //还有标签页
+                        currentTabKey = '' + this.tabs.TabPane[lastIndex].id
+                    } else {
+                        //已关闭所有tab页,默认切换到主控制台
+                        currentTabKey = '0'
+                    }
+                }
+                //过滤关闭tab
+                let tmpTabPane = this.tabs.TabPane.filter(pane => pane.id != targetKey)
+                //最后赋值
+                this.tabs.currentTabKey = currentTabKey
+                this.tabs.TabPane = tmpTabPane
+                console.log(typeof targetKey)
+                console.log(targetKey)
+                console.log('移除标签页')
+            }
+        },
+        //监听tab切换
+        onChangeTab(activeKey) {
+            console.log(activeKey)
+            console.log('切换标签页')
+        },
+        //添加标签页
+        onOpenTab() {
+            console.log('添加标签页')
+            this.tabs.TabPane.push({id: '7', name: 'Tab 7', content: 'test'})
+        }
+    }
 });
 </script>
 
@@ -183,9 +255,8 @@ export default defineComponent({
 .logo {
     float: left;
     width: 126px;
-    height: 31px;
-    margin: 16px 24px 16px 0;
-    background: rgba(255, 255, 255, 0.3);
+    height: 43px;
+    margin: 10px 24px 10px 0;
 }
 
 /* tabs */
@@ -205,8 +276,8 @@ export default defineComponent({
     border-radius: 5px;
     padding: 5px;
     background: #fff;
-    min-height: 360px;
-    max-height: calc(100vh - 186px);
+    /* min-height: 360px; */
+    height: calc(100vh - 186px);
     overflow: auto;
 }
 
