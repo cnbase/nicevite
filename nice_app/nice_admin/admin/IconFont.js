@@ -8,7 +8,7 @@ const NiceIconFont = createFromIconfontCN({
     scriptUrl: '//at.alicdn.com/t/c/font_3573915_yni8tx5kkr.js',
 })
 
-//scriptUrl是图标集地址
+//自定义图标集，scriptUrl是图标集地址
 const IconFont = createFromIconfontCN({
     scriptUrl: '//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js',
 })

@@ -33,88 +33,23 @@
         </a-layout-header>
         <a-layout>
             <a-layout-sider v-model:collapsed="sideShow" collapsible :style="{ width: '200px', overflow: 'auto' }">
-                <a-menu v-model:selectedKeys="selectedMenuKeys" theme="dark" mode="inline">
-                    <a-menu-item key="1">
-                        <nice-icon-font type="icon-caidan" />
-                        <span>Option 1</span>
-                    </a-menu-item>
-                    <a-menu-item key="2">
-                        <nice-icon-font type="icon-caidan" />
-                        <span>Option 2</span>
-                    </a-menu-item>
-                    <a-sub-menu key="sub1">
-                        <template #title>
-                            <span>
-                                <icon-font type="icon-twitter" />
-                                <span>User</span>
-                            </span>
-                        </template>
-                        <a-menu-item key="3">Tom</a-menu-item>
-                        <a-menu-item key="4">Bill</a-menu-item>
-                        <a-menu-item key="5">Alex</a-menu-item>
-                    </a-sub-menu>
-                    <a-sub-menu key="sub2">
-                        <template #title>
-                            <span>
-                                <icon-font type="icon-twitter" />
-                                <span>Team</span>
-                            </span>
-                        </template>
-                        <a-menu-item key="6">Team 1</a-menu-item>
-                        <a-menu-item key="8">Team 2</a-menu-item>
-                    </a-sub-menu>
-                    <a-menu-item key="9">
-                        <icon-font type="icon-twitter" />
-                        <span>File</span>
-                    </a-menu-item>
-                    <a-menu-item key="10">
-                        <icon-font type="icon-twitter" />
-                        <span>File</span>
-                    </a-menu-item>
-                    <a-menu-item key="11">
-                        <icon-font type="icon-twitter" />
-                        <span>File</span>
-                    </a-menu-item>
-                    <a-menu-item key="12">
-                        <icon-font type="icon-twitter" />
-                        <span>File</span>
-                    </a-menu-item>
-                    <a-menu-item key="13">
-                        <icon-font type="icon-twitter" />
-                        <span>File</span>
-                    </a-menu-item>
-                    <a-menu-item key="14">
-                        <icon-font type="icon-twitter" />
-                        <span>File</span>
-                    </a-menu-item>
-                    <a-menu-item key="15">
-                        <icon-font type="icon-twitter" />
-                        <span>File</span>
-                    </a-menu-item>
-                    <a-menu-item key="16">
-                        <icon-font type="icon-twitter" />
-                        <span>File</span>
-                    </a-menu-item>
-                    <a-menu-item key="17">
-                        <icon-font type="icon-twitter" />
-                        <span>File</span>
-                    </a-menu-item>
-                    <a-menu-item key="18">
-                        <icon-font type="icon-twitter" />
-                        <span>File</span>
-                    </a-menu-item>
-                </a-menu>
+                <nice-menu :selectedKeys="menu.selectedKeys" :openKeys="menu.openKeys" :menuList="menu.list">
+                </nice-menu>
             </a-layout-sider>
             <a-layout>
                 <a-layout-content :style="{ margin: '5px 16px 0' }">
                     <a-tabs v-model:activeKey="tabs.currentTabKey" type="editable-card" :hideAdd="true"
-                        @edit="onCloseTab" @change="onChangeTab">
+                        @edit="onCloseTab">
+
                         <a-tab-pane key="0" tab="控制台" :closable="false" class="nice_tab_pane">
                             控制台主页
                         </a-tab-pane>
+
                         <a-tab-pane v-for="pane in tabs.TabPane" :key="pane.id" :tab="pane.name" :closable="true"
                             class="nice_tab_pane">
-                            {{ pane.content }}
+                            <iframe :src="pane.url" frameborder="0" class="iframe" v-if="pane.url">
+                                <p>Your browser does not support iframes.</p>
+                            </iframe>
                         </a-tab-pane>
                     </a-tabs>
                 </a-layout-content>
@@ -124,20 +59,26 @@
             </a-layout>
         </a-layout>
     </a-layout>
-    <a-modal v-model:visible="changePwd.visible" title="修改登录密码" :confirm-loading="changePwd.loading" @ok="onChangePwd">
-        <p>修改密码表单</p>
+    <a-modal title="修改登录密码" v-model:visible="changePwd.visible" :maskClosable="false"
+        :confirm-loading="changePwd.loading" :cancelText="'取消'" :okText="'提交'" @ok="onChangePwd">
+        <a-form-item label="原密码" :labelCol="changePwd.labelCol">
+            <a-input-password v-model:value="changePwd.old" />
+        </a-form-item>
+        <a-form-item label="新密码" :labelCol="changePwd.labelCol">
+            <a-input-password v-model:value="changePwd.new" />
+        </a-form-item>
+        <a-form-item label="确认密码" :labelCol="changePwd.labelCol">
+            <a-input-password v-model:value="changePwd.confirm" />
+        </a-form-item>
     </a-modal>
 </template>
 
-<script setup>
-
-</script>
-
 <script>
-import { Layout, LayoutHeader, LayoutSider, LayoutFooter, LayoutContent, Menu, MenuItem, SubMenu, Tabs, TabPane, Avatar, Dropdown, Modal, message } from 'ant-design-vue'
+import { Layout, LayoutHeader, LayoutSider, LayoutFooter, LayoutContent, Menu, MenuItem, Tabs, TabPane, Avatar, Dropdown, Modal, message, Form, FormItem, Input, InputPassword } from 'ant-design-vue'
 import { DownOutlined } from '@ant-design/icons-vue';
-import { NiceIconFont, default as IconFont } from './IconFont'
-import { defineComponent, ref, getCurrentInstance } from 'vue';
+import { NiceIconFont } from './IconFont'
+import { defineComponent, nextTick } from 'vue';
+import NiceMenu from './components/NiceMenu.vue'
 
 export default defineComponent({
     components: {
@@ -146,46 +87,65 @@ export default defineComponent({
         ALayoutSider: LayoutSider,
         ALayoutFooter: LayoutFooter,
         ALayoutContent: LayoutContent,
-        AMenu: Menu,
-        AMenuItem: MenuItem,
-        ASubMenu: SubMenu,
         ATabs: Tabs,
         ATabPane: TabPane,
         AAvatar: Avatar,
         ADropdown: Dropdown,
-        IconFont,
+        AMenu: Menu,
+        AMenuItem: MenuItem,
         NiceIconFont,
         DownOutlined,
         AModal: Modal,
+        NiceMenu,
+        AFormItem: FormItem,
+        AInputPassword: InputPassword,
     },
     data() {
         return {
             changePwd: {
                 visible: false,
                 loading: false,
+                old: '',
+                new: '',
+                confirm: '',
+                labelCol: { style: { width: '80px' } }
             },
             //侧边栏显隐状态
-            sideShow: ref(false),
-            //默认选中的菜单数组
-            selectedMenuKeys: ref(['1']),
+            sideShow: false,
+            //菜单相关
+            menu: {
+                //默认选中的菜单数组
+                selectedKeys: ['1'],
+                //默认展开的subMenu菜单数组
+                openKeys: ['1'],
+                //菜单列表
+                list: [
+                    {
+                        id: '1', name: 'Menu 1', icon: 'icon-caidan', url: '/abc', children: [
+                            { id: '2', name: 'SubMenu 2', icon: 'icon-caidan', url: '/abcd', children: [] },
+                            { id: '3', name: 'SubMenu 3', icon: 'icon-caidan', url: '/abcde', children: [] },
+                        ]
+                    },
+                    { id: '4', name: 'Menu 4', icon: 'icon-caidan', url: '/aaa', children: [] }
+                ]
+            },
             //标签页相关
             tabs: {
                 //当前激活状态的tab标签
                 currentTabKey: '1',
                 //标签页列表
                 TabPane: [
-                    { id: '1', name: 'Tab 1', content: '<p style="height: 300px;">300px height</p><p style="height: 300px;">300px height</p><p style="height: 300px;">300px height</p><p style="height: 300px;">300px height</p><p style="height: 300px;">300px height</p>' },
-                    { id: '2', name: 'Tab 2', content: 'Content of Tab Pane 2' },
-                    { id: '3', name: 'Tab 3', content: 'Content of Tab Pane 3' },
-                    { id: '4', name: 'Tab 4', content: 'Content of Tab Pane 4' },
-                    { id: '5', name: 'Tab 5', content: 'Content of Tab Pane 5' },
+                    { id: '1', name: 'Tab 1', url: 'http://www.baidu.com' },
+                    { id: '2', name: 'Tab 2', url: 'http://www.163.com' },
+                    { id: '3', name: 'Tab 3', url: 'http://www.qq.com' },
+                    { id: '4', name: 'Tab 4', url: 'http://www.douyin.com' },
+                    { id: '5', name: 'Tab 5', url: 'http://www.taobao.com' },
                 ],
             },
         };
     },
     mounted() {
-        // let app = getCurrentInstance()
-        window.niceApp.onOpenTab = this.onOpenTab
+        window.onOpenTab = this.onOpenTab
     },
     methods: {
         //监听修改密码
@@ -210,20 +170,24 @@ export default defineComponent({
         onCloseTab(targetKey, action) {
             if (action === 'remove') {
                 let currentTabKey = this.tabs.currentTabKey
-                //当前要关闭的tab页==当前显示的tab页,切换显示最后一个tab页
                 if (targetKey === currentTabKey) {
-                    //查找最靠近的tab页索引
-                    let lastIndex = 0
+                    //关闭当前标签页
+                    let currentIndex = -1
                     this.tabs.TabPane.forEach((pane, i) => {
                         if (pane.id == targetKey) {
-                            lastIndex = i - 1
+                            currentIndex = i
                         }
                     })
-                    if (lastIndex >= 0) {
-                        //还有标签页
-                        currentTabKey = '' + this.tabs.TabPane[lastIndex].id
+                    if (currentIndex > 0) {
+                        //切换到前一个标签页
+                        currentTabKey = '' + this.tabs.TabPane[currentIndex - 1].id
+                    } else if (currentIndex == 0 && this.tabs.TabPane.length - 1 > 0) {
+                        if (this.tabs.TabPane.length - 1 > 0) {
+                            //切换到后一个标签页
+                            currentTabKey = '' + this.tabs.TabPane[currentIndex + 1].id
+                        }
                     } else {
-                        //已关闭所有tab页,默认切换到主控制台
+                        //切换到控制台
                         currentTabKey = '0'
                     }
                 }
@@ -232,20 +196,13 @@ export default defineComponent({
                 //最后赋值
                 this.tabs.currentTabKey = currentTabKey
                 this.tabs.TabPane = tmpTabPane
-                console.log(typeof targetKey)
-                console.log(targetKey)
-                console.log('移除标签页')
             }
         },
-        //监听tab切换
-        onChangeTab(activeKey) {
-            console.log(activeKey)
-            console.log('切换标签页')
-        },
         //添加标签页
-        onOpenTab() {
+        onOpenTab(tab) {
             console.log('添加标签页')
-            this.tabs.TabPane.push({id: '7', name: 'Tab 7', content: 'test'})
+            this.tabs.TabPane.push(tab)
+            this.tabs.currentTabKey = '' + tab.id
         }
     }
 });
@@ -277,8 +234,8 @@ export default defineComponent({
     padding: 5px;
     background: #fff;
     /* min-height: 360px; */
-    height: calc(100vh - 186px);
-    overflow: auto;
+    height: calc(100vh - 189px);
+    overflow: hidden;
 }
 
 /* 滚动条 */
@@ -301,5 +258,13 @@ export default defineComponent({
     box-shadow: inset 0 0 5px rgba(226, 226, 226, 0.1);
     border-radius: 10px;
     background: #ededed;
+}
+
+.iframe {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
 }
 </style>

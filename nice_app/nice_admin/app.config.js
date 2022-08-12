@@ -13,7 +13,9 @@ const AppPlugins = [
 /**
  * vite resolve 配置
  */
-const AppResolve = {}
+const AppResolve = {
+    alias: { 'vue': 'vue/dist/vue.esm-bundler.js' },
+}
 
 /**
  * vite css 配置
