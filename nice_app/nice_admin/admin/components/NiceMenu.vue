@@ -1,5 +1,5 @@
 <template>
-    <a-menu :selectedKeys="selectedKeys" :openKeys="openKeys" theme="dark" mode="inline">
+    <a-menu :selectedKeys="selectedKeys" :openKeys="openKeys" theme="dark" mode="inline" @click="onClickMenu">
         <template v-for="menu in menuList" :key="'' + menu.id">
             <template v-if="!menu.children || menu.children.length === 0">
                 <a-menu-item :key="'' + menu.id">
@@ -88,5 +88,31 @@ export default defineComponent({
             default: () => ([])
         }
     },
+    data() {
+        return {
+            //重新组装菜单格式
+            allMenuList: [],
+        }
+    },
+    emits: ['click-menu'],
+    methods: {
+        onClickMenu(MenuItem) {
+            //获取菜单信息
+            let menu = this.findMenu(MenuItem.key)
+            this.$emit('click-menu',menu,MenuItem)
+        },
+        findMenu(key) {
+            this.buildMenuList(this.menuList)
+            return this.allMenuList.find((menu)=>menu.id==key)
+        },
+        buildMenuList(menuList) {
+            for(let i=0;i<menuList.length;i++) {
+                this.allMenuList.push(menuList[i])
+                if (menuList[i].children && menuList[i].children.length > 0) {
+                    this.buildMenuList(menuList[i].children)
+                }
+            }
+        }
+    }
 })
 </script>

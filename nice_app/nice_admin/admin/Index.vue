@@ -33,7 +33,7 @@
         </a-layout-header>
         <a-layout>
             <a-layout-sider v-model:collapsed="sideShow" collapsible :style="{ width: '200px', overflow: 'auto' }">
-                <nice-menu :selectedKeys="menu.selectedKeys" :openKeys="menu.openKeys" :menuList="menu.list">
+                <nice-menu :menuList="menuList" @click-menu="onClickMenu">
                 </nice-menu>
             </a-layout-sider>
             <a-layout>
@@ -42,7 +42,9 @@
                         @edit="onCloseTab">
 
                         <a-tab-pane key="0" tab="控制台" :closable="false" class="nice_tab_pane">
-                            控制台主页
+                            <iframe :src="'./welcome/index.html'" frameborder="0" class="iframe">
+                                <p>Your browser does not support iframes.</p>
+                            </iframe>
                         </a-tab-pane>
 
                         <a-tab-pane v-for="pane in tabs.TabPane" :key="pane.id" :tab="pane.name" :closable="true"
@@ -77,7 +79,7 @@
 import { Layout, LayoutHeader, LayoutSider, LayoutFooter, LayoutContent, Menu, MenuItem, Tabs, TabPane, Avatar, Dropdown, Modal, message, Form, FormItem, Input, InputPassword } from 'ant-design-vue'
 import { DownOutlined } from '@ant-design/icons-vue';
 import { NiceIconFont } from './IconFont'
-import { defineComponent, nextTick } from 'vue';
+import { defineComponent } from 'vue';
 import NiceMenu from './components/NiceMenu.vue'
 
 export default defineComponent({
@@ -112,35 +114,23 @@ export default defineComponent({
             },
             //侧边栏显隐状态
             sideShow: false,
-            //菜单相关
-            menu: {
-                //默认选中的菜单数组
-                selectedKeys: ['1'],
-                //默认展开的subMenu菜单数组
-                openKeys: ['1'],
-                //菜单列表
-                list: [
-                    {
-                        id: '1', name: 'Menu 1', icon: 'icon-caidan', url: '/abc', children: [
-                            { id: '2', name: 'SubMenu 2', icon: 'icon-caidan', url: '/abcd', children: [] },
-                            { id: '3', name: 'SubMenu 3', icon: 'icon-caidan', url: '/abcde', children: [] },
-                        ]
-                    },
-                    { id: '4', name: 'Menu 4', icon: 'icon-caidan', url: '/aaa', children: [] }
-                ]
-            },
+            //菜单列表
+            menuList: [
+                { id: '5', name: '主控制台', icon: 'icon-caidan', url: '/admin/welcome/index.html', children: [] },
+                {
+                    id: '1', name: 'Menu 1', icon: 'icon-caidan', url: '/abc', children: [
+                        { id: '2', name: 'SubMenu 2', icon: 'icon-caidan', url: '/abcd', children: [] },
+                        { id: '3', name: 'SubMenu 3', icon: 'icon-caidan', url: '/abcde', children: [] },
+                    ]
+                },
+                { id: '4', name: 'Menu 4', icon: 'icon-caidan', url: '/aaa', children: [] },
+            ],
             //标签页相关
             tabs: {
                 //当前激活状态的tab标签
-                currentTabKey: '1',
+                currentTabKey: '0',
                 //标签页列表
-                TabPane: [
-                    { id: '1', name: 'Tab 1', url: 'http://www.baidu.com' },
-                    { id: '2', name: 'Tab 2', url: 'http://www.163.com' },
-                    { id: '3', name: 'Tab 3', url: 'http://www.qq.com' },
-                    { id: '4', name: 'Tab 4', url: 'http://www.douyin.com' },
-                    { id: '5', name: 'Tab 5', url: 'http://www.taobao.com' },
-                ],
+                TabPane: [],
             },
         };
     },
@@ -200,9 +190,22 @@ export default defineComponent({
         },
         //添加标签页
         onOpenTab(tab) {
-            console.log('添加标签页')
-            this.tabs.TabPane.push(tab)
-            this.tabs.currentTabKey = '' + tab.id
+            if (''+tab.id == '0' || tab.url == '/admin/welcome/index.html') {
+                return this.tabs.currentTabKey = '0'
+            }
+            let find = this.tabs.TabPane.find((item) => '' + item.id == '' + tab.id)
+            if (find) {
+                return this.tabs.currentTabKey = tab.id
+            } else {
+                this.tabs.TabPane.push(tab)
+                return this.tabs.currentTabKey = '' + tab.id
+            }
+        },
+        //点击菜单
+        onClickMenu(menu) {
+            if (menu && menu.url) {
+                this.onOpenTab(menu)
+            }
         }
     }
 });
@@ -236,28 +239,6 @@ export default defineComponent({
     /* min-height: 360px; */
     height: calc(100vh - 189px);
     overflow: hidden;
-}
-
-/* 滚动条 */
-::-webkit-scrollbar {
-    /*滚动条整体样式*/
-    width: 4px;
-    /*高宽分别对应横竖滚动条的尺寸*/
-    height: 1px;
-}
-
-::-webkit-scrollbar-thumb {
-    /*滚动条里面小方块*/
-    border-radius: 10px;
-    box-shadow: inset 0 0 5px rgba(226, 226, 226, 0.1);
-    background: rgb(110, 110, 110);
-}
-
-::-webkit-scrollbar-track {
-    /*滚动条里面轨道*/
-    box-shadow: inset 0 0 5px rgba(226, 226, 226, 0.1);
-    border-radius: 10px;
-    background: #ededed;
 }
 
 .iframe {

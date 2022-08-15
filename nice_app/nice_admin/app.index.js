@@ -7,6 +7,7 @@ const RootPath = resolve(__dirname)
 const AllIndexFiles = {
     admin: {
         index: RootPath + '/admin/index.html',
+        welcome: RootPath + '/admin/welcome/index.html',
     }
 }
 
