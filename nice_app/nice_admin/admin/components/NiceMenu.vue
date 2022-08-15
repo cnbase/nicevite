@@ -5,7 +5,7 @@
                 <a-menu-item :key="'' + menu.id">
                     <template #icon>
                         <icon-font :type="menu.icon" v-if="menu.icon" />
-                        <nice-icon-font type="icon-caidan" v-else />
+                        <nice-icon-font type="nice-caidan" v-else />
                     </template>
                     <span v-text="menu.name"></span>
                 </a-menu-item>
@@ -17,9 +17,9 @@
     </a-menu>
 </template>
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 import { Menu, MenuItem, SubMenu } from 'ant-design-vue'
-import { NiceIconFont, default as IconFont } from '../IconFont'
+import { NiceIconFont, IconFont } from '../IconFont'
 
 const NiceSubMenu = {
     name: 'NiceSubMenu',
@@ -39,7 +39,7 @@ const NiceSubMenu = {
     <a-sub-menu :key="'' + menuInfo.id">
         <template #icon>
             <icon-font :type="menuInfo.icon" v-if="menuInfo.icon" />
-            <nice-icon-font type="icon-caidan" v-else />
+            <nice-icon-font type="nice-caidan" v-else />
         </template>
         <template #title>
             <span v-text="menuInfo.name"></span>
@@ -49,7 +49,7 @@ const NiceSubMenu = {
                 <a-menu-item :key="'' + menu.id">
                     <template #icon>
                         <icon-font :type="menu.icon" v-if="menu.icon" />
-                        <nice-icon-font type="icon-caidan" v-else />
+                        <nice-icon-font type="nice-caidan" v-else />
                     </template>
                     <span v-text="menu.name"></span>
                 </a-menu-item>
@@ -99,14 +99,14 @@ export default defineComponent({
         onClickMenu(MenuItem) {
             //获取菜单信息
             let menu = this.findMenu(MenuItem.key)
-            this.$emit('click-menu',menu,MenuItem)
+            this.$emit('click-menu', menu, MenuItem)
         },
         findMenu(key) {
             this.buildMenuList(this.menuList)
-            return this.allMenuList.find((menu)=>menu.id==key)
+            return this.allMenuList.find((menu) => menu.id == key)
         },
         buildMenuList(menuList) {
-            for(let i=0;i<menuList.length;i++) {
+            for (let i = 0; i < menuList.length; i++) {
                 this.allMenuList.push(menuList[i])
                 if (menuList[i].children && menuList[i].children.length > 0) {
                     this.buildMenuList(menuList[i].children)

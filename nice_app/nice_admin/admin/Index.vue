@@ -8,14 +8,14 @@
                 <div :style="{ lineHeight: '64px', marginLeft: '10px', textAlign: 'center' }">
                     <a-avatar :style="{ fontSize: '32px', backgroundColor: '#001529' }">
                         <template #icon>
-                            <nice-icon-font type="icon-user" />
+                            <nice-icon-font type="nice-user" />
                         </template>
                     </a-avatar>
                     <a-dropdown>
                         <a class="ant-dropdown-link" :style="{ marginLeft: '5px', color: '#fff', fontWeight: 'bold' }"
                             @click.prevent>
                             游客,你好
-                            <DownOutlined />
+                            <nice-icon-font type="nice-shuangxiangxia" />
                         </a>
                         <template #overlay>
                             <a-menu>
@@ -39,21 +39,45 @@
             <a-layout>
                 <a-layout-content :style="{ margin: '5px 16px 0' }">
                     <a-tabs v-model:activeKey="tabs.currentTabKey" type="editable-card" :hideAdd="true"
-                        @edit="onCloseTab">
-
-                        <a-tab-pane key="0" tab="控制台" :closable="false" class="nice_tab_pane">
-                            <iframe :src="'./welcome/index.html'" frameborder="0" class="iframe">
-                                <p>Your browser does not support iframes.</p>
-                            </iframe>
+                        @edit="onCloseTab" @change="onChangeTab">
+                        <a-tab-pane v-for="pane in tabs.TabPane" :key="pane.id" :closable="pane.id != '0'">
+                            <template #tab>
+                                <nice-icon-font type="nice-caidan" v-if="pane.id == '0'" />
+                                <icon-font :type="pane.icon" v-if="pane.id != '0' && pane.icon" />
+                                <span v-text="pane.name"></span>
+                            </template>
                         </a-tab-pane>
-
-                        <a-tab-pane v-for="pane in tabs.TabPane" :key="pane.id" :tab="pane.name" :closable="true"
-                            class="nice_tab_pane">
-                            <iframe :src="pane.url" frameborder="0" class="iframe" v-if="pane.url">
-                                <p>Your browser does not support iframes.</p>
-                            </iframe>
-                        </a-tab-pane>
+                        <template #rightExtra>
+                            <a-dropdown-button @click="onClickReload">
+                                <nice-icon-font type="nice-shuaxin" title="刷新" />
+                                <template #overlay>
+                                    <a-menu @click="onClickTabMore">
+                                        <a-menu-item key="target">
+                                            <nice-icon-font type="nice-tiaozhuan" title="新窗口打开"
+                                                style="margin-right: 4px;" />
+                                            <span>新窗口打开</span>
+                                        </a-menu-item>
+                                        <a-menu-item key="closeOther">
+                                            <nice-icon-font type="nice-guanbi" title="关闭其他页面"
+                                                style="margin-right: 4px;" />
+                                            <span>关闭其他页面</span>
+                                        </a-menu-item>
+                                        <a-menu-item key="closeAll">
+                                            <nice-icon-font type="nice-lajixiang" title="关闭所有页面"
+                                                style="margin-right: 4px;" />
+                                            <span>关闭所有页面</span>
+                                        </a-menu-item>
+                                    </a-menu>
+                                </template>
+                            </a-dropdown-button>
+                        </template>
                     </a-tabs>
+                    <div class="nice_tab_pane">
+                        <iframe v-for="pane in tabs.TabPane" :key="pane.id" :id="'iframe_'+pane.id" :ref="'iframe_' + pane.id" :src="pane.url"
+                            frameborder="0" class="iframe" v-show="pane.id == tabs.currentTabKey">
+                            <p>Your browser does not support iframes.</p>
+                        </iframe>
+                    </div>
                 </a-layout-content>
                 <a-layout-footer style="text-align: center">
                     Ant Design ©2018 Created by Ant UED
@@ -76,10 +100,9 @@
 </template>
 
 <script>
-import { Layout, LayoutHeader, LayoutSider, LayoutFooter, LayoutContent, Menu, MenuItem, Tabs, TabPane, Avatar, Dropdown, Modal, message, Form, FormItem, Input, InputPassword } from 'ant-design-vue'
-import { DownOutlined } from '@ant-design/icons-vue';
-import { NiceIconFont } from './IconFont'
-import { defineComponent } from 'vue';
+import { Layout, LayoutHeader, LayoutSider, LayoutFooter, LayoutContent, Menu, MenuItem, Tabs, TabPane, Avatar, Dropdown, DropdownButton, Modal, message, Form, FormItem, Input, InputPassword } from 'ant-design-vue'
+import { NiceIconFont, IconFont } from './IconFont'
+import { defineComponent } from 'vue'
 import NiceMenu from './components/NiceMenu.vue'
 
 export default defineComponent({
@@ -93,10 +116,11 @@ export default defineComponent({
         ATabPane: TabPane,
         AAvatar: Avatar,
         ADropdown: Dropdown,
+        ADropdownButton: DropdownButton,
         AMenu: Menu,
         AMenuItem: MenuItem,
         NiceIconFont,
-        DownOutlined,
+        IconFont,
         AModal: Modal,
         NiceMenu,
         AFormItem: FormItem,
@@ -116,26 +140,31 @@ export default defineComponent({
             sideShow: false,
             //菜单列表
             menuList: [
-                { id: '5', name: '主控制台', icon: 'icon-caidan', url: '/admin/welcome/index.html', children: [] },
+                { id: '0', name: '控制台', icon: 'nice-caidan', url: '/admin/welcome/index.html', children: [] },
                 {
-                    id: '1', name: 'Menu 1', icon: 'icon-caidan', url: '/abc', children: [
-                        { id: '2', name: 'SubMenu 2', icon: 'icon-caidan', url: '/abcd', children: [] },
-                        { id: '3', name: 'SubMenu 3', icon: 'icon-caidan', url: '/abcde', children: [] },
+                    id: '1', name: 'Menu 1', icon: 'nice-caidan', url: '/abc', children: [
+                        { id: '2', name: 'SubMenu 2', icon: 'nice-caidan', url: '/abcd', children: [] },
+                        { id: '3', name: 'SubMenu 3', icon: 'nice-caidan', url: '/abcde', children: [] },
                     ]
                 },
-                { id: '4', name: 'Menu 4', icon: 'icon-caidan', url: '/aaa', children: [] },
+                { id: '4', name: '淘宝', icon: 'nice-caidan', url: 'https://www.h5w3.com/81344.html', children: [] },
             ],
+            //重组1维数组格式菜单
+            allMenuList: [],
             //标签页相关
             tabs: {
                 //当前激活状态的tab标签
                 currentTabKey: '0',
                 //标签页列表
-                TabPane: [],
+                TabPane: [
+                    { id: '0', name: '控制台', icon: 'nice-caidan', url: '/admin/welcome/index.html', children: [] },
+                ],
             },
         };
     },
     mounted() {
         window.onOpenTab = this.onOpenTab
+        this.buildMenuList(this.menuList)
     },
     methods: {
         //监听修改密码
@@ -156,18 +185,47 @@ export default defineComponent({
             console.log('注销登录')
             message.success('注销登录')
         },
+        //刷新当前页
+        onClickReload() {
+            let currentPane = this.tabs.TabPane.find(pane => pane.id == this.tabs.currentTabKey)
+            currentPane && this.$refs['iframe_'+this.tabs.currentTabKey][0].contentWindow.location.replace(currentPane.url)
+        },
+        //监听更多按钮
+        onClickTabMore({ key }) {
+            if (key == 'target') {
+                //新窗口打开
+                let currentPane = this.tabs.TabPane.find(pane => pane.id == this.tabs.currentTabKey)
+                currentPane && window.open(currentPane.url,'_blank')
+            }
+            if (key == 'closeOther') {
+                //关闭其他标签页
+                this.tabs.TabPane = this.tabs.TabPane.filter((pane) => { return pane.id == '0' || pane.id == this.tabs.currentTabKey})
+            }
+            if (key == 'closeAll') {
+                //关闭所有标签页
+                this.tabs.TabPane = this.tabs.TabPane.filter(pane => pane.id == '0')
+                this.tabs.currentTabKey = '0'
+            }
+        },
+        //监听切换tab
+        onChangeTab(activeKey) {
+            let pane = this.tabs.TabPane.find((item) => item.id == activeKey)
+            if (!pane) {
+                //打开新标签页
+                let activePane = this.allMenuList.find(item => item.id == activeKey)
+                if (activePane) {
+                    this.tabs.TabPane.push(activePane)
+                }
+            }
+            this.tabs.currentTabKey = activeKey
+        },
         //监听关闭tab标签
         onCloseTab(targetKey, action) {
             if (action === 'remove') {
                 let currentTabKey = this.tabs.currentTabKey
                 if (targetKey === currentTabKey) {
                     //关闭当前标签页
-                    let currentIndex = -1
-                    this.tabs.TabPane.forEach((pane, i) => {
-                        if (pane.id == targetKey) {
-                            currentIndex = i
-                        }
-                    })
+                    let currentIndex = this.tabs.TabPane.findIndex(pane => pane.id == targetKey)
                     if (currentIndex > 0) {
                         //切换到前一个标签页
                         currentTabKey = '' + this.tabs.TabPane[currentIndex - 1].id
@@ -190,21 +248,31 @@ export default defineComponent({
         },
         //添加标签页
         onOpenTab(tab) {
-            if (''+tab.id == '0' || tab.url == '/admin/welcome/index.html') {
-                return this.tabs.currentTabKey = '0'
-            }
-            let find = this.tabs.TabPane.find((item) => '' + item.id == '' + tab.id)
-            if (find) {
-                return this.tabs.currentTabKey = tab.id
+            if ('' + tab.id == '0') {
+                this.tabs.currentTabKey = '0'
             } else {
-                this.tabs.TabPane.push(tab)
-                return this.tabs.currentTabKey = '' + tab.id
+                let find = this.tabs.TabPane.find((item) => '' + item.id == '' + tab.id)
+                if (find) {
+                    this.tabs.currentTabKey = tab.id
+                } else {
+                    this.tabs.TabPane.push(tab)
+                    this.tabs.currentTabKey = '' + tab.id
+                }
             }
         },
         //点击菜单
         onClickMenu(menu) {
             if (menu && menu.url) {
                 this.onOpenTab(menu)
+            }
+        },
+        //重组一维数组格式
+        buildMenuList(menuList) {
+            for (let i = 0; i < menuList.length; i++) {
+                this.allMenuList.push(menuList[i])
+                if (menuList[i].children && menuList[i].children.length > 0) {
+                    this.buildMenuList(menuList[i].children)
+                }
             }
         }
     }
