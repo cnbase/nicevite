@@ -1,49 +1,22 @@
 <template>
-    <div class="header Cgreen">
-        <div class="wrapper clearfix">
-            <h1>点教后台管理系统</h1>
-            <span class="QRspan">
-                <i class="iconfont">&#xe61b;</i>
-                <span>关注公众号</span>
-                <img class="QRimg" :src="'./login/04/qr.png'" />
-            </span>
-        </div>
-    </div>
-    <div class="content">
-        <div class="wrapper">
-            <img class="bg1" :src="'./login/04/bg1.png'" />
-            <div class="loginBox">
-                <div class="logo"></div>
-                <div class="formDiv">
-                    <form action="" method="post">
-                        <label class="user">
-                            <input type="text" placeholder="请输入用户名" />
-                            <i class="iconfont">&#xe614;</i>
-                        </label>
-                        <label class="pwd">
-                            <input type="password" placeholder="请输入密码" />
-                            <i class="iconfont">&#xe615;</i>
-                        </label>
-                        <div class="pwdOper">
-                            <span class="remember">
-                                <label>
-                                    <input type="checkbox" class="hide" />
-                                    <span class="checkbox"></span>
-                                    记住密码
-                                </label>
-                            </span>
-                            <a class="forget Cred" href="javascript:;">忘记密码?</a>
-                        </div>
-                        <a href="javascript:;" class="submit">登 录</a>
-                    </form>
-                </div>
+    <div class="login_box">
+        <div class="login_l_img"><img :src="'./login/02/login-img.png'" /></div>
+        <div class="login">
+            <div class="login_logo"><a href="#"><img :src="'./login/02/login_logo.png'" /></a></div>
+            <div class="login_name">
+                <p>后台管理系统</p>
             </div>
+            <form method="post">
+                <input name="username" type="text" value="用户名" onfocus="this.value=''"
+                    onblur="if(this.value==''){this.value='用户名'}">
+                <span id="password_text"
+                    onclick="this.style.display='none';document.getElementById('password').style.display='block';document.getElementById('password').focus().select();">密码</span>
+                <input name="password" type="password" id="password" style="display:none;"
+                    onblur="if(this.value==''){document.getElementById('password_text').style.display='block';this.style.display='none'};" />
+                <input value="登录" style="width:100%;" type="submit">
+            </form>
         </div>
-    </div>
-    <div class="footer">
-        <div class="wrapper">
-            <span>Copyright © 2005-2018 www.ruixin.com 版权所有 京ICP备16039949号-1 京公网备案 11010802022079号</span>
-        </div>
+        <div class="copyright">某某有限公司 版权所有©2016-2018 技术支持电话：000-00000000</div>
     </div>
 </template>
 <script>
@@ -56,16 +29,6 @@ export default defineComponent({
             passwd: '',
             smsCode: '',
         }
-    },
-    mounted() {
-        window.onload = function() {
-			setContentHeight();
-			window.onresize = setContentHeight;
-			function setContentHeight () {
-				let windowHeight = document.documentElement.clientHeight;
-				document.getElementsByClassName('content')[0].style.height = windowHeight - 102 - 138 + 'px';
-			}
-		}
     },
     methods: {
 
