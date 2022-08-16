@@ -6,8 +6,10 @@ const RootPath = resolve(__dirname)
  */
 const AllIndexFiles = {
     admin: {
+        login: RootPath + '/admin/login.html',
         index: RootPath + '/admin/index.html',
         welcome: RootPath + '/admin/welcome/index.html',
+        error404: RootPath + '/admin/Error404.html',
     }
 }
 
